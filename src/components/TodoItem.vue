@@ -4,13 +4,19 @@
       <input type="checkbox" class="filled-in" v-model="isDone" />
       <span>{{ tarea }}</span>
     </label>
-    <button class="btn-floating btn-small red eliminar-btn" @click="borrarTarea">
+    <a
+      class="btn-floating btn-small waves-effect waves-light red tooltipped"
+      data-position="bottom"
+      data-tooltip="Borrar Tarea"
+      @click="borrarTarea"
+    >
       <i class="material-icons">delete</i>
-    </button>
+    </a>
   </li>
 </template>
 
 <script>
+import M from 'materialize-css'
 export default {
   props: {
     tarea: String,
@@ -21,8 +27,23 @@ export default {
       isDone: false,
     }
   },
+  mounted() {
+    M.Tooltip.init(document.querySelectorAll('.tooltipped'), {})
+    M.Modal.init(document.querySelectorAll('.modal'), {})
+
+    const savedTareas = localStorage.getItem(`tareas_${this.id}`)
+    if (savedTareas) {
+      this.tareas = JSON.parse(savedTareas)
+    }
+  },
+
   methods: {
     borrarTarea() {
+      const tooltipElems = document.querySelectorAll('.tooltipped')
+      tooltipElems.forEach((elem) => {
+        const instance = M.Tooltip.getInstance(elem)
+        if (instance) instance.destroy()
+      })
       this.$emit('borrarTarea', this.index)
     },
   },

@@ -23,7 +23,12 @@
       </ul>
     </div>
     <div class="card-action">
-      <a class="btn-floating btn-small waves-effect waves-light red" @click="borrarLista">
+      <a
+        class="btn-floating btn-small waves-effect waves-light red tooltipped"
+        data-position="bottom"
+        data-tooltip="Borrar Lista"
+        @click="borrarLista"
+      >
         <i class="material-icons">delete</i>
       </a>
     </div>
@@ -32,7 +37,7 @@
 
 <script>
 import Tarea from './TodoItem.vue'
-
+import M from 'materialize-css'
 export default {
   components: {
     Tarea,
@@ -48,6 +53,9 @@ export default {
     }
   },
   mounted() {
+    M.Tooltip.init(document.querySelectorAll('.tooltipped'), {})
+    M.Modal.init(document.querySelectorAll('.modal'), {})
+
     const savedTareas = localStorage.getItem(`tareas_${this.id}`)
     if (savedTareas) {
       this.tareas = JSON.parse(savedTareas)
@@ -55,6 +63,12 @@ export default {
   },
   methods: {
     borrarLista() {
+      const tooltipElems = document.querySelectorAll('.tooltipped')
+      tooltipElems.forEach((elem) => {
+        const instance = M.Tooltip.getInstance(elem)
+        if (instance) instance.destroy()
+      })
+
       this.$emit('borrarTodoList', this.id)
       localStorage.removeItem(`tareas_${this.id}`)
     },
