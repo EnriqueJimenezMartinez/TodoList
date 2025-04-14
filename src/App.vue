@@ -7,25 +7,27 @@
     </div>
 
     <div class="row">
-      <div class="col s12 m6 l4">
-        <a
-          class="btn-floating waves-effect waves-light btn modal-trigger tooltipped"
-          data-position="bottom"
-          data-tooltip="Añadir Lista"
-          href="#modalLista"
-        >
-          <i class="material-icons left">add</i>
-        </a>
-      </div>
-      <div class="col s12 m6 l4">
-        <a
-          class="btn-floating waves-effect red tooltipped"
-          data-position="bottom"
-          data-tooltip="Eliminar todas las listas permanentemente"
-          @click="eliminarLocalStorage"
-        >
-          <i class="material-icons left">delete_forever</i>
-        </a>
+      <div class="col s12">
+        <div class="valign-wrapper" style="gap: 10px">
+          <a
+            class="btn-floating waves-effect waves-light btn modal-trigger tooltipped"
+            data-position="bottom"
+            data-tooltip="Añadir Lista"
+            href="#modalLista"
+          >
+            <i class="material-icons left">add</i>
+          </a>
+
+          <a
+            v-if="todolists.length > 0"
+            class="btn-floating waves-effect red tooltipped"
+            data-position="bottom"
+            data-tooltip="Eliminar todas las listas permanentemente"
+            @click="eliminarLocalStorage"
+          >
+            <i class="material-icons left">delete_forever</i>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -90,6 +92,11 @@ export default {
     borrarTodoList(id) {
       this.todolists = this.todolists.filter((list) => list.id !== id)
       localStorage.setItem('todolists', JSON.stringify(this.todolists))
+      const tooltipElems = document.querySelectorAll('.tooltipped')
+      tooltipElems.forEach((elem) => {
+        const instance = M.Tooltip.getInstance(elem)
+        if (instance) instance.destroy()
+      })
     },
     guardarTodolists() {
       localStorage.setItem('todolists', JSON.stringify(this.todolists))
