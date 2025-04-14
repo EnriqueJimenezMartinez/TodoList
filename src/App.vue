@@ -92,11 +92,6 @@ export default {
     borrarTodoList(id) {
       this.todolists = this.todolists.filter((list) => list.id !== id)
       localStorage.setItem('todolists', JSON.stringify(this.todolists))
-      const tooltipElems = document.querySelectorAll('.tooltipped')
-      tooltipElems.forEach((elem) => {
-        const instance = M.Tooltip.getInstance(elem)
-        if (instance) instance.destroy()
-      })
     },
     guardarTodolists() {
       localStorage.setItem('todolists', JSON.stringify(this.todolists))
@@ -104,6 +99,11 @@ export default {
     eliminarLocalStorage() {
       localStorage.clear()
       this.todolists = []
+      const tooltipElems = document.querySelectorAll('.tooltipped')
+      tooltipElems.forEach((elem) => {
+        const instance = M.Tooltip.getInstance(elem)
+        if (instance) instance.destroy()
+      })
     },
   },
 }

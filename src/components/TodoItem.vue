@@ -1,19 +1,23 @@
 <template>
-  <li :class="{ done: isDone }">
-    <label>
+  <li class="valign-wrapper" :class="{ done: isDone }" style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+    <label class="flex-grow-1" style="margin: 0;">
       <input type="checkbox" class="filled-in" v-model="isDone" />
       <span>{{ tarea }}</span>
     </label>
     <a
       class="btn-floating btn-small waves-effect waves-light red tooltipped"
+      :data-tooltip="'Borrar Tarea: ' + tarea"
       data-position="bottom"
-      data-tooltip="Borrar Tarea"
       @click="borrarTarea"
     >
       <i class="material-icons">delete</i>
     </a>
   </li>
 </template>
+
+
+
+
 
 <script>
 import M from 'materialize-css'
@@ -54,8 +58,5 @@ export default {
 .done {
   text-decoration: line-through;
   opacity: 0.6;
-}
-.eliminar-btn {
-  margin-left: 10px;
 }
 </style>

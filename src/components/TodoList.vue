@@ -1,7 +1,21 @@
 <template>
   <div class="card">
     <div class="card-content">
-      <span class="card-title">{{ title }}</span>
+      <div class="row" style="margin-bottom: 0;">
+        <div class="col s10">
+          <span class="card-title black-text"><strong>{{ title }}</strong></span>
+        </div>
+        <div class="col s2 right-align">
+          <a
+            class="btn-floating btn-small waves-effect waves-light red tooltipped"
+            data-position="bottom"
+            data-tooltip="Borrar Lista"
+            @click="borrarLista"
+          >
+            <i class="material-icons">delete</i>
+          </a>
+        </div>
+      </div>
 
       <div class="input-field">
         <input
@@ -21,16 +35,6 @@
           @borrarTarea="borrarTarea"
         />
       </ul>
-    </div>
-    <div class="card-action">
-      <a
-        class="btn-floating btn-small waves-effect waves-light red tooltipped"
-        data-position="bottom"
-        data-tooltip="Borrar Lista"
-        @click="borrarLista"
-      >
-        <i class="material-icons">delete</i>
-      </a>
     </div>
   </div>
 </template>
