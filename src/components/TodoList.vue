@@ -28,6 +28,25 @@
 
       <ul class="collection">
         <Tarea
+          v-for="(tarea, index) in tareasLimitadas"
+          :key="index"
+          :tarea="tarea"
+          :index="index"
+          @borrarTarea="borrarTarea"
+        />
+        <li v-if="tareas.length > 3" class="collection-item center-align">
+          <a href="#modal-tareas" class="modal-trigger">Ver todas las tareas...</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div :id="'modal-tareas'" class="modal">
+    <div class="modal-content">
+      <h5>Todas las tareas</h5>
+      <ul class="collection">
+        <Tarea
           v-for="(tarea, index) in tareas"
           :key="index"
           :tarea="tarea"
@@ -36,12 +55,16 @@
         />
       </ul>
     </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close btn-flat">Cerrar</a>
+    </div>
   </div>
 </template>
 
 <script>
 import Tarea from './TodoItem.vue'
 import M from 'materialize-css'
+
 export default {
   components: {
     Tarea,
@@ -55,6 +78,11 @@ export default {
       nuevaTarea: '',
       tareas: [],
     }
+  },
+  computed: {
+    tareasLimitadas() {
+      return this.tareas.slice(0, 3)
+    },
   },
   mounted() {
     M.Tooltip.init(document.querySelectorAll('.tooltipped'), {})
@@ -93,3 +121,4 @@ export default {
   },
 }
 </script>
+
