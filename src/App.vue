@@ -47,7 +47,7 @@
     </div>
 
     <div class="row">
-      <div v-for="(list, index) in todolists" :key="index" class="col s12 m6 l4">
+      <div v-for="list in todolists" :key="list.id" class="col s12 m6 l4">
         <TodoList :title="list.title" :id="list.id" @borrarTodoList="borrarTodoList" />
       </div>
     </div>
