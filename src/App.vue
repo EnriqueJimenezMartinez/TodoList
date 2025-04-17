@@ -1,14 +1,14 @@
 <template>
-  <div class="container">
+  <div class="had-container">
     <div class="row">
-      <div class="col s12">
-        <h1>To-Do List</h1>
+      <div class="col s12 black z-depth-2">
+        <h2 class="white-text center-align">Tus Listas</h2>
       </div>
     </div>
 
     <div class="row">
-      <div class="col s12">
-        <div class="valign-wrapper" style="gap: 10px">
+      <div class="col s12 center-align parentWrapper">
+        <div class="center-align z-depth-2" id="btnWrapper">
           <a
             class="btn-floating waves-effect waves-light btn modal-trigger tooltipped"
             data-position="bottom"
@@ -117,9 +117,20 @@ export default {
   margin-top: 20px;
 }
 
-.card {
-  margin: 0;
-  height: 100%;
-  width: 100%;
+
+.parentWrapper{
+  display: flex;
+  justify-content: center;
+}
+
+#btnWrapper{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  width: 150px;
+  background: black;
+  padding: 0 0 20px 0;
+  border-radius: 50px;
+  margin-top: -40px;
 }
 </style>

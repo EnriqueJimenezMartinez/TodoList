@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card z-depth-3">
     <div class="card-content">
       <div class="row" style="margin-bottom: 0;">
         <div class="col s10">
@@ -26,7 +26,7 @@
         />
       </div>
 
-      <ul class="collection">
+      <ul class="special collection" style=" display: flex; flex-direction: column; gap: 10px;vertical-align: middle">
         <Task
           v-for="(task, index) in limitedTasks"
           :key="index"
@@ -122,3 +122,14 @@ export default {
 }
 </script>
 
+<style>
+.special{
+  border: none !important;
+}
+.card {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 20px !important;
+}
+</style>

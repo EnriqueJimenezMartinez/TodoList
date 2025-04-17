@@ -1,5 +1,5 @@
 <template>
-  <li class="valign-wrapper" :class="{ done: isDone }" style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+  <li class="taskLine" :class="{ done: isDone }" >
     <label class="flex-grow-1" style="margin: 0;">
       <input type="checkbox" class="filled-in" v-model="isDone" />
       <span>{{ task }}</span>
@@ -55,4 +55,17 @@ export default {
   text-decoration: line-through;
   opacity: 0.6;
 }
+
+.taskLine{
+  display: flex;
+  justify-content: space-between;
+  vertical-align: middle;
+  border: none;
+}
+.taskLine > label{
+  border: none;
+}
+.taskLine > label > input {
+  margin-top: 10px;
+ }
 </style>
