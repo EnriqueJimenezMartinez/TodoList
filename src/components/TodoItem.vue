@@ -2,28 +2,24 @@
   <li class="valign-wrapper" :class="{ done: isDone }" style="margin-bottom: 10px; display: flex; justify-content: space-between;">
     <label class="flex-grow-1" style="margin: 0;">
       <input type="checkbox" class="filled-in" v-model="isDone" />
-      <span>{{ tarea }}</span>
+      <span>{{ task }}</span>
     </label>
     <a
       class="btn-floating btn-small waves-effect waves-light red tooltipped"
-      :data-tooltip="'Borrar Tarea: ' + tarea"
+      :data-tooltip="'Borrar Tarea: ' + task"
       data-position="bottom"
-      @click="borrarTarea"
+      @click="eraseItemEvent"
     >
       <i class="material-icons">delete</i>
     </a>
   </li>
 </template>
 
-
-
-
-
 <script>
 import M from 'materialize-css'
 export default {
   props: {
-    tarea: String,
+    task: String,
     index: Number,
   },
   data() {
@@ -35,20 +31,20 @@ export default {
     M.Tooltip.init(document.querySelectorAll('.tooltipped'), {})
     M.Modal.init(document.querySelectorAll('.modal'), {})
 
-    const savedTareas = localStorage.getItem(`tareas_${this.id}`)
-    if (savedTareas) {
-      this.tareas = JSON.parse(savedTareas)
+    const itemsSaved = localStorage.getItem(`tasks_${this.id}`)
+    if (itemsSaved) {
+      this.tasks = JSON.parse(itemsSaved)
     }
   },
 
   methods: {
-    borrarTarea() {
+    eraseItemEvent() {
       const tooltipElems = document.querySelectorAll('.tooltipped')
       tooltipElems.forEach((elem) => {
         const instance = M.Tooltip.getInstance(elem)
         if (instance) instance.destroy()
       })
-      this.$emit('borrarTarea', this.index)
+      this.$emit('eraseItem', this.index)
     },
   },
 }
