@@ -55,6 +55,7 @@
 </template>
 
 <script>
+
 import TodoList from './components/TodoList.vue'
 import M from 'materialize-css'
 

@@ -42,7 +42,7 @@ export default {
   },
 
   methods: {
-    borrarTarea() {
+    deleteTodo() {
       const tooltipElems = document.querySelectorAll('.tooltipped')
       tooltipElems.forEach((elem) => {
         const instance = M.Tooltip.getInstance(elem)
