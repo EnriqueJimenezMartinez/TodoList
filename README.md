@@ -42,5 +42,5 @@ Estas son las principales tecnologías y herramientas utilizadas en el desarroll
 
 ## Autores ✒️
 
-* *Enrique Jiménez Martínez* - Desarrolador Principal - [EnriqueJimenezAMartinez](https://github.com/EnriqueJimenzMartinez)
+* *Enrique Jiménez Martínez* - Desarrolador Principal - [EnriqueJimenezMartinez](https://github.com/EnriqueJimenzMartinez)
 
