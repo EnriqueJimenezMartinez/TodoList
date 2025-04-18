@@ -12,8 +12,8 @@ Necesitas tener instalado:
 
 Clona el repositorio en tu máquina local:
 
-  git clone https://github.com/tuusuario/vue-todolist.git
-  cd vue-todolist
+  git clone https://github.com/EnriqueJimenezMartinez/TodoList.git
+  cd TodoList
 
 Instala las dependencias:
   npm install
