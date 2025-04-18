@@ -1,16 +1,18 @@
 <template>
-  <div class="card">
+  <div class="card z-depth-3">
     <div class="card-content">
-      <div class="row" style="margin-bottom: 0;">
+      <div class="row" style="margin-bottom: 0">
         <div class="col s10">
-          <span class="card-title black-text"><strong>{{ title }}</strong></span>
+          <span class="card-title black-text"
+            ><strong>{{ title }}</strong></span
+          >
         </div>
         <div class="col s2 right-align">
           <a
             class="btn-floating btn-small waves-effect waves-light red tooltipped"
             data-position="bottom"
             data-tooltip="Borrar Lista"
-            @click="borrarLista"
+            @click="eraseListEvent"
           >
             <i class="material-icons">delete</i>
           </a>
@@ -18,56 +20,50 @@
       </div>
 
       <div class="input-field">
-        <input
-          v-model="nuevaTarea"
-          type="text"
-          placeholder="Nueva tarea"
-          @keyup.enter="agregarTarea"
-        />
+        <input v-model="newTask" type="text" placeholder="Nueva tarea" @keyup.enter="addItem" />
       </div>
 
-      <ul class="collection">
-        <Tarea
-          v-for="(tarea, index) in tareasLimitadas"
+      <ul class="special collection" style="display: flex; flex-direction: column; gap: 10px">
+        <Task
+          v-for="(task, index) in limitedTasks"
           :key="index"
-          :tarea="tarea"
+          :task="task"
           :index="index"
-          @borrarTarea="borrarTarea"
+          @eraseItem="dropItem"
         />
-        <li v-if="tareas.length > 3" class="collection-item center-align">
-          <a href="#modal-tareas" class="modal-trigger">Ver todas las tareas...</a>
+        <li v-if="tasks.length > 3" class="collection-item center-align">
+          <a :href="`#modal-tasks-${id}`" class="modal-trigger"> Ver todas las tareas... </a>
         </li>
       </ul>
     </div>
   </div>
 
-
-  <div :id="'modal-tareas'" class="modal">
-    <div class="modal-content">
-      <h5>Todas las tareas</h5>
-      <ul class="collection">
-        <Tarea
-          v-for="(tarea, index) in tareas"
-          :key="index"
-          :tarea="tarea"
-          :index="index"
-          @borrarTarea="borrarTarea"
-        />
-      </ul>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close btn-flat">Cerrar</a>
-    </div>
+  <div :id="`modal-tasks-${id}`" class="modal">
+  <div class="modal-content">
+    <h5>Todas las tareas</h5>
+    <ul class="collection">
+      <Task
+        v-for="(task, index) in tasks"
+        :key="index"
+        :task="task"
+        :index="index"
+        @eraseItem="dropItem"
+      />
+    </ul>
   </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close btn-flat">Cerrar</a>
+  </div>
+</div>
 </template>
 
 <script>
-import Tarea from './TodoItem.vue'
+import Task from './TodoItem.vue'
 import M from 'materialize-css'
 
 export default {
   components: {
-    Tarea,
+    Task,
   },
   props: {
     title: String,
@@ -75,50 +71,61 @@ export default {
   },
   data() {
     return {
-      nuevaTarea: '',
-      tareas: [],
+      newTask: '',
+      tasks: [],
     }
   },
   computed: {
-    tareasLimitadas() {
-      return this.tareas.slice(0, 3)
+    limitedTasks() {
+      return this.tasks.slice(0, 3)
     },
   },
   mounted() {
     M.Tooltip.init(document.querySelectorAll('.tooltipped'), {})
     M.Modal.init(document.querySelectorAll('.modal'), {})
 
-    const savedTareas = localStorage.getItem(`tareas_${this.id}`)
-    if (savedTareas) {
-      this.tareas = JSON.parse(savedTareas)
+    const savedTasks = localStorage.getItem(`task_${this.id}`)
+    if (savedTasks) {
+      this.tasks = JSON.parse(savedTasks)
     }
   },
   methods: {
-    borrarLista() {
+    eraseListEvent() {
       const tooltipElems = document.querySelectorAll('.tooltipped')
       tooltipElems.forEach((elem) => {
         const instance = M.Tooltip.getInstance(elem)
         if (instance) instance.destroy()
       })
 
-      this.$emit('borrarTodoList', this.id)
-      localStorage.removeItem(`tareas_${this.id}`)
+      this.$emit('eraseTodoListEvent', this.id)
+      localStorage.removeItem(`task_${this.id}`)
     },
-    agregarTarea() {
-      if (this.nuevaTarea.trim() !== '') {
-        this.tareas.push(this.nuevaTarea)
-        this.guardarTareas()
-        this.nuevaTarea = ''
+    addItem() {
+      if (this.newTask.trim() !== '') {
+        this.tasks.push(this.newTask)
+        this.saveItems()
+        this.newTask = ''
       }
     },
-    borrarTarea(index) {
-      this.tareas.splice(index, 1)
-      this.guardarTareas()
+    dropItem(index) {
+      this.tasks.splice(index, 1)
+      this.saveItems()
     },
-    guardarTareas() {
-      localStorage.setItem(`tareas_${this.id}`, JSON.stringify(this.tareas))
+    saveItems() {
+      localStorage.setItem(`task_${this.id}`, JSON.stringify(this.tasks))
     },
   },
 }
 </script>
 
+<style>
+.special {
+  border: none !important;
+}
+.card {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 20px !important;
+}
+</style>
