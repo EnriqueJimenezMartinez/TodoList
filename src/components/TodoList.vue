@@ -3,9 +3,18 @@
     <div class="card-content">
       <div class="row" style="margin-bottom: 0">
         <div class="col s10">
-          <span class="card-title black-text"
-            ><strong>{{ title }}</strong></span
+          <span
+            v-if="title.length > 20"
+            class="card-title black-text truncate tooltipped"
+            :data-tooltip="title"
+            data-position="top"
           >
+            <strong>{{ title }}</strong>
+          </span>
+
+          <span v-else class="card-title black-text truncate">
+            <strong>{{ title }}</strong>
+          </span>
         </div>
         <div class="col s2 right-align">
           <a

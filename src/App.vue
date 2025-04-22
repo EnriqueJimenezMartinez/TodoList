@@ -148,7 +148,7 @@ export default {
 
 .lista-flex-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
   justify-items: start;
   padding: 20px;

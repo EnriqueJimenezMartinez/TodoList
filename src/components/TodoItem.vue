@@ -2,16 +2,18 @@
   <li class="taskLine" :class="{ done: isDone }">
     <label class="flex-grow-1" style="margin: 0">
       <input type="checkbox" class="filled-in" v-model="isDone" />
-      <span>{{ task }}</span>
+      <span :class="{ 'grey-text text-darken-1': isDone }" style="word-break: break-word;">{{ task }}</span>
     </label>
-    <a
-      class="btn-floating btn-small waves-effect waves-light red tooltipped"
-      :data-tooltip="'Borrar Tarea: ' + task"
-      data-position="bottom"
-      @click="eraseItemEvent"
-    >
-      <i class="material-icons">delete</i>
-    </a>
+    <div class="col s1 center-align">
+        <a
+          class="btn-floating btn-small red tooltipped"
+          :data-tooltip="'Borrar Tarea: ' + task"
+          data-position="bottom"
+          @click="eraseItemEvent"
+        >
+          <i class="material-icons">delete</i>
+        </a>
+      </div>
   </li>
 </template>
 
