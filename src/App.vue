@@ -36,7 +36,12 @@
         <h4>Crear nueva lista</h4>
         <form @submit.prevent="addList">
           <div class="input-field">
-            <input v-model="newTodoList" type="text" placeholder="Nombre de la lista" required />
+            <input
+              v-model="newTodoList"
+              type="text"
+              :placeholder="placeholderSuggestion"
+              required
+            />
           </div>
           <button type="button" class="modal-close waves-effect waves-red btn-flat">
             Cancelar
@@ -46,8 +51,8 @@
       </div>
     </div>
 
-    <div class="row">
-      <div v-for="list in todolists" :key="list.id" class="col s12 m6 l4">
+    <div class="lista-flex-container">
+      <div v-for="list in todolists" :key="list.id" class="lista-flex-item">
         <TodoList :title="list.title" :id="list.id" @eraseTodoListEvent="eraseList" />
       </div>
     </div>
@@ -55,7 +60,6 @@
 </template>
 
 <script>
-
 import TodoList from './components/TodoList.vue'
 import M from 'materialize-css'
 
@@ -68,11 +72,13 @@ export default {
     return {
       newTodoList: '',
       todolists: [],
+      placeholderSuggestion: 'Nombre de la lista',
     }
   },
   mounted() {
     M.Tooltip.init(document.querySelectorAll('.tooltipped'), {})
-    M.Modal.init(document.querySelectorAll('.modal'), {})
+    const modalElems = document.querySelectorAll('.modal')
+    M.Modal.init(modalElems)
 
     const savedLists = localStorage.getItem('todolists')
     if (savedLists) {
@@ -80,19 +86,25 @@ export default {
     }
   },
   methods: {
+    updateLists(id) {
+      this.todolists = this.todolists.filter((list) => list.id !== id)
+      this.saveTodoLists()
+    },
+
     addList() {
       const newList = {
         id: crypto.randomUUID(),
         title: this.newTodoList,
+        tasks: [],
       }
       this.todolists.push(newList)
-      localStorage.setItem('todolists', JSON.stringify(this.todolists))
+      this.saveTodoLists()
       this.newTodoList = ''
       M.Modal.getInstance(document.querySelector('#modalLista')).close()
     },
     eraseList(id) {
       this.todolists = this.todolists.filter((list) => list.id !== id)
-      localStorage.setItem('todolists', JSON.stringify(this.todolists))
+      this.saveTodoLists()
     },
     saveTodoLists() {
       localStorage.setItem('todolists', JSON.stringify(this.todolists))
@@ -118,13 +130,12 @@ export default {
   margin-top: 20px;
 }
 
-
-.parentWrapper{
+.parentWrapper {
   display: flex;
   justify-content: center;
 }
 
-#btnWrapper{
+#btnWrapper {
   display: flex;
   gap: 10px;
   justify-content: center;
@@ -133,5 +144,17 @@ export default {
   padding: 0 0 20px 0;
   border-radius: 50px;
   margin-top: -40px;
+}
+
+.lista-flex-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  justify-items: start;
+  padding: 20px;
+}
+
+.lista-flex-item {
+  width: 100%;
 }
 </style>

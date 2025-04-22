@@ -39,22 +39,22 @@
   </div>
 
   <div :id="`modal-tasks-${id}`" class="modal">
-  <div class="modal-content">
-    <h5>Todas las tareas</h5>
-    <ul class="collection">
-      <Task
-        v-for="(task, index) in tasks"
-        :key="index"
-        :task="task"
-        :index="index"
-        @eraseItem="dropItem"
-      />
-    </ul>
+    <div class="modal-content">
+      <h5>Todas las tareas</h5>
+      <ul class="collection">
+        <Task
+          v-for="(task, index) in tasks"
+          :key="index"
+          :task="task"
+          :index="index"
+          @eraseItem="dropItem"
+        />
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close btn-flat">Cerrar</a>
+    </div>
   </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-close btn-flat">Cerrar</a>
-  </div>
-</div>
 </template>
 
 <script>
@@ -69,13 +69,17 @@ export default {
     title: String,
     id: [String],
   },
+  emits: ['eraseTodoListEvent'],
   data() {
     return {
       newTask: '',
-      tasks: [],
     }
   },
   computed: {
+    tasks() {
+      const list = this.$parent.todolists.find((list) => list.id === this.id)
+      return list ? list.tasks : []
+    },
     limitedTasks() {
       return this.tasks.slice(0, 3)
     },
@@ -98,21 +102,25 @@ export default {
       })
 
       this.$emit('eraseTodoListEvent', this.id)
-      localStorage.removeItem(`task_${this.id}`)
+      this.$emit('update-todolists', this.id)
     },
     addItem() {
       if (this.newTask.trim() !== '') {
-        this.tasks.push(this.newTask)
-        this.saveItems()
-        this.newTask = ''
+        const list = this.$parent.todolists.find((list) => list.id === this.id)
+
+        if (list) {
+          list.tasks.push(this.newTask)
+          this.$parent.saveTodoLists()
+          this.newTask = ''
+        }
       }
     },
     dropItem(index) {
-      this.tasks.splice(index, 1)
-      this.saveItems()
-    },
-    saveItems() {
-      localStorage.setItem(`task_${this.id}`, JSON.stringify(this.tasks))
+      const list = this.$parent.todolists.find((list) => list.id === this.id)
+      if (list) {
+        list.tasks.splice(index, 1)
+        this.$parent.saveTodoLists()
+      }
     },
   },
 }
