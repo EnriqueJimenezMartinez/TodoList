@@ -10,6 +10,9 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  compilerOptions: {
+    isCustomElement: (tag) => tag.includes('analytics'),
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

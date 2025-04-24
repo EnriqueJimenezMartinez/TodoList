@@ -53,12 +53,21 @@
 
     <div class="lista-flex-container">
       <div v-for="list in todolists" :key="list.id" class="lista-flex-item">
-        <TodoList :title="list.title" :id="list.id" :list="list"   @eraseTodoListEvent="eraseList" @guardar="saveTodoLists" />
+        <TodoList
+          :title="list.title"
+          :id="list.id"
+          :list="list"
+          @eraseTodoListEvent="eraseList"
+          @guardar="saveTodoLists"
+        />
       </div>
     </div>
   </div>
+  <Analytics />
 </template>
-
+<script setup>
+import { Analytics } from '@vercel/analytics/vue'
+</script>
 <script>
 import TodoList from './components/TodoList.vue'
 import M from 'materialize-css'
@@ -86,7 +95,6 @@ export default {
     }
   },
   methods: {
-
     addList() {
       const newList = {
         id: crypto.randomUUID(),
