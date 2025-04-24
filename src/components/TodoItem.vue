@@ -1,19 +1,26 @@
 <template>
-  <li class="taskLine" :class="{ done: isDone }">
+  <li class="taskLine" :class="{ done: task.completed }">
     <label class="flex-grow-1" style="margin: 0">
-      <input type="checkbox" class="filled-in" v-model="isDone" />
-      <span :class="{ 'grey-text text-darken-1': isDone }" style="word-break: break-word;">{{ task }}</span>
+      <input
+        type="checkbox"
+        class="filled-in"
+        :checked="task.completed"
+        @change="updateTaskStatus"
+      />
+      <span :class="{ 'grey-text text-darken-1': task.completed }">
+        {{ task.task }}
+      </span>
     </label>
-    <div class="col s1 center-align">
-        <a
-          class="btn-floating btn-small red tooltipped"
-          :data-tooltip="'Borrar Tarea: ' + task"
-          data-position="bottom"
-          @click="eraseItemEvent"
-        >
-          <i class="material-icons">delete</i>
-        </a>
-      </div>
+    <div class="center-align">
+      <a
+        class="btn-floating btn-small red tooltipped"
+        :data-tooltip="'Borrar Tarea: ' + task.task"
+        data-position="bottom"
+        @click="eraseItemEvent"
+      >
+        <i class="material-icons">delete</i>
+      </a>
+    </div>
   </li>
 </template>
 
@@ -21,19 +28,13 @@
 import M from 'materialize-css'
 export default {
   props: {
-    task: String,
+    task: Object,
     index: Number,
-  },
-  data() {
-    return {
-      isDone: false,
-    }
   },
   mounted() {
     M.Tooltip.init(document.querySelectorAll('.tooltipped'), {})
     M.Modal.init(document.querySelectorAll('.modal'), {})
   },
-
   methods: {
     eraseItemEvent() {
       const tooltipElems = document.querySelectorAll('.tooltipped')
@@ -42,6 +43,9 @@ export default {
         if (instance) instance.destroy()
       })
       this.$emit('eraseItem', this.index)
+    },
+    updateTaskStatus() {
+      this.$emit('toggleCompleted', this.index)
     },
   },
 }
@@ -56,12 +60,15 @@ export default {
 .taskLine {
   display: flex;
   justify-content: space-between;
-  vertical-align: middle;
+  align-items: center;
   border: none;
+  padding: 0 10px;
 }
+
 .taskLine > label {
   border: none;
 }
+
 .taskLine > label > input {
   margin-top: 10px;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="card z-depth-3">
+  <div class="card z-depth-3" :class="{ 'completed-list': allCompleted }">
     <div class="card-content">
       <div class="row" style="margin-bottom: 0">
         <div class="col s10">
@@ -29,7 +29,12 @@
       </div>
 
       <div class="input-field">
-        <input v-model="newTask" type="text" placeholder="Nueva tarea" @keyup.enter="addItem" />
+        <input
+          v-model="newTask"
+          type="text"
+          placeholder="Nueva tarea"
+          @keyup.enter="addItem"
+        />
       </div>
 
       <ul class="special collection" style="display: flex; flex-direction: column; gap: 10px">
@@ -39,9 +44,12 @@
           :task="task"
           :index="index"
           @eraseItem="dropItem"
+          @toggleCompleted="toggleCompleted"
         />
         <li v-if="tasks.length > 3" class="collection-item center-align">
-          <a :href="`#modal-tasks-${id}`" class="modal-trigger"> Ver todas las tareas... </a>
+          <a :href="`#modal-tasks-${id}`" class="modal-trigger">
+            Ver todas las tareas...
+          </a>
         </li>
       </ul>
     </div>
@@ -57,11 +65,23 @@
           :task="task"
           :index="index"
           @eraseItem="dropItem"
+          @toggleCompleted="toggleCompleted"
         />
       </ul>
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-close btn-flat">Cerrar</a>
+    </div>
+  </div>
+
+  <div :id="`modal-confirm-${id}`" class="modal">
+    <div class="modal-content">
+      <h5>Eliminar lista vacía?</h5>
+      <p>La lista está vacía. ¿Quieres eliminarla?</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close btn-flat" @click="confirmEraseList">Sí</a>
+      <a href="#!" class="modal-close btn-flat">No</a>
     </div>
   </div>
 </template>
@@ -71,26 +91,28 @@ import Task from './TodoItem.vue'
 import M from 'materialize-css'
 
 export default {
-  components: {
-    Task,
-  },
+  components: { Task },
   props: {
     title: String,
     id: [String],
+    list: Object,
   },
-  emits: ['eraseTodoListEvent'],
+  emits: ['eraseTodoListEvent', 'guardar'],
   data() {
     return {
       newTask: '',
+      localList: { ...this.list },
     }
   },
   computed: {
     tasks() {
-      const list = this.$parent.todolists.find((list) => list.id === this.id)
-      return list ? list.tasks : []
+      return this.localList.tasks || []
     },
     limitedTasks() {
       return this.tasks.slice(0, 3)
+    },
+    allCompleted() {
+      return this.tasks.every(task => task.completed)
     },
   },
   mounted() {
@@ -99,7 +121,7 @@ export default {
 
     const savedTasks = localStorage.getItem(`task_${this.id}`)
     if (savedTasks) {
-      this.tasks = JSON.parse(savedTasks)
+      this.localList.tasks = JSON.parse(savedTasks)
     }
   },
   methods: {
@@ -111,38 +133,52 @@ export default {
       })
 
       this.$emit('eraseTodoListEvent', this.id)
-      this.$emit('update-todolists', this.id)
     },
     addItem() {
       if (this.newTask.trim() !== '') {
-        const list = this.$parent.todolists.find((list) => list.id === this.id)
-
-        if (list) {
-          list.tasks.push(this.newTask)
-          this.$parent.saveTodoLists()
-          this.newTask = ''
-        }
+        this.localList.tasks.push({ task: this.newTask, completed: false })
+        this.$emit('guardar', this.localList)
+        this.newTask = ''
       }
     },
     dropItem(index) {
-      const list = this.$parent.todolists.find((list) => list.id === this.id)
-      if (list) {
-        list.tasks.splice(index, 1)
-        this.$parent.saveTodoLists()
+      if (this.localList.tasks.length === 1) {
+        const modalElem = document.getElementById(`modal-confirm-${this.id}`)
+        const instance = M.Modal.getInstance(modalElem)
+        instance.open()
+      } else {
+        this.localList.tasks.splice(index, 1)
+        this.$emit('guardar', this.localList)
       }
+    },
+    confirmEraseList() {
+      this.eraseListEvent()
+    },
+    toggleCompleted(index) {
+      const task = this.localList.tasks[index]
+      task.completed = !task.completed
+      this.$emit('guardar', this.localList)
     },
   },
 }
 </script>
 
 <style>
-.special {
-  border: none !important;
-}
-.card {
+div.card {
   margin: 0;
   height: 100%;
   width: 100%;
-  border-radius: 20px !important;
+  border-radius: 20px;
+}
+
+ul.special.collection {
+  border: none;
+}
+
+.completed-list {
+  background-color: #d4edda;
+  border: 2px solid #28a745;
 }
 </style>
+
+

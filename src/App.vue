@@ -53,7 +53,7 @@
 
     <div class="lista-flex-container">
       <div v-for="list in todolists" :key="list.id" class="lista-flex-item">
-        <TodoList :title="list.title" :id="list.id" @eraseTodoListEvent="eraseList" />
+        <TodoList :title="list.title" :id="list.id" :list="list"   @eraseTodoListEvent="eraseList" @guardar="saveTodoLists" />
       </div>
     </div>
   </div>
@@ -86,10 +86,6 @@ export default {
     }
   },
   methods: {
-    updateLists(id) {
-      this.todolists = this.todolists.filter((list) => list.id !== id)
-      this.saveTodoLists()
-    },
 
     addList() {
       const newList = {
