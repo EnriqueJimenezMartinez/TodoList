@@ -1,6 +1,7 @@
 {
-  "name": "pruebas",
-  "version": "0.0.0",
+  "name": "tuslistas",
+  "version": "1.0.0",
+  "author": "Enrique Jiménez Martínez",
   "private": true,
   "type": "module",
   "scripts": {
