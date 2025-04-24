@@ -64,12 +64,14 @@
     </div>
   </div>
   <Analytics />
-  <SpeedInsights />
+  <SpeedInsights/>
 </template>
+
 <script setup>
 import { Analytics } from '@vercel/analytics/vue'
-import { SpeedInsights } from '@vercel/speed-insights/vue'
+import { SpeedInsights } from '@vercel/speed-insights/vue';
 </script>
+
 <script>
 import TodoList from './components/TodoList.vue'
 import M from 'materialize-css'
@@ -93,7 +95,13 @@ export default {
 
     const savedLists = localStorage.getItem('todolists')
     if (savedLists) {
-      this.todolists = JSON.parse(savedLists)
+      this.todolists = JSON.parse(savedLists).map(list => {
+
+        if (!list.id) {
+          list.id = crypto.randomUUID()
+        }
+        return list
+      })
     }
   },
   methods: {

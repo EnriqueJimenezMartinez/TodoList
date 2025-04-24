@@ -29,12 +29,7 @@
       </div>
 
       <div class="input-field">
-        <input
-          v-model="newTask"
-          type="text"
-          placeholder="Nueva tarea"
-          @keyup.enter="addItem"
-        />
+        <input v-model="newTask" type="text" placeholder="Nueva tarea" @keyup.enter="addItem" />
       </div>
 
       <ul class="special collection" style="display: flex; flex-direction: column; gap: 10px">
@@ -47,9 +42,7 @@
           @toggleCompleted="toggleCompleted"
         />
         <li v-if="tasks.length > 3" class="collection-item center-align">
-          <a :href="`#modal-tasks-${id}`" class="modal-trigger">
-            Ver todas las tareas...
-          </a>
+          <a :href="`#modal-tasks-${id}`" class="modal-trigger"> Ver todas las tareas... </a>
         </li>
       </ul>
     </div>
@@ -76,12 +69,12 @@
 
   <div :id="`modal-confirm-${id}`" class="modal">
     <div class="modal-content">
-      <h5>Eliminar lista vacía?</h5>
+      <h5>¿Eliminar lista vacía?</h5>
       <p>La lista está vacía. ¿Quieres eliminarla?</p>
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-close btn-flat" @click="confirmEraseList">Sí</a>
-      <a href="#!" class="modal-close btn-flat">No</a>
+      <a href="#!" class="modal-close btn-flat" @click="eraseOnlyTask">No</a>
     </div>
   </div>
 </template>
@@ -102,6 +95,7 @@ export default {
     return {
       newTask: '',
       localList: { ...this.list },
+      taskToRemoveIndex: null,
     }
   },
   computed: {
@@ -112,7 +106,7 @@ export default {
       return this.tasks.slice(0, 3)
     },
     allCompleted() {
-      return this.tasks.every(task => task.completed)
+      return this.tasks.every((task) => task.completed)
     },
   },
   mounted() {
@@ -143,6 +137,7 @@ export default {
     },
     dropItem(index) {
       if (this.localList.tasks.length === 1) {
+        this.taskToRemoveIndex = index
         const modalElem = document.getElementById(`modal-confirm-${this.id}`)
         const instance = M.Modal.getInstance(modalElem)
         instance.open()
@@ -158,6 +153,13 @@ export default {
       const task = this.localList.tasks[index]
       task.completed = !task.completed
       this.$emit('guardar', this.localList)
+    },
+    eraseOnlyTask() {
+      if (this.taskToRemoveIndex !== null) {
+        this.localList.tasks.splice(this.taskToRemoveIndex, 1)
+        this.taskToRemoveIndex = null
+        this.$emit('guardar', this.localList)
+      }
     },
   },
 }
@@ -180,5 +182,3 @@ ul.special.collection {
   border: 2px solid #28a745;
 }
 </style>
-
-
