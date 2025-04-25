@@ -6,28 +6,26 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col s12 center-align parentWrapper">
-        <div class="center-align z-depth-2" id="btnWrapper">
-          <a
-            class="btn-floating waves-effect waves-light btn modal-trigger tooltipped"
-            data-position="bottom"
-            data-tooltip="Añadir Lista"
-            href="#modalLista"
-          >
-            <i class="material-icons left">add</i>
-          </a>
+    <div class="row center-align parentWrapper">
+      <div id="btnWrapper" class="z-depth-2">
+        <a
+          class="btn-floating waves-effect waves-light btn modal-trigger tooltipped"
+          data-position="bottom"
+          data-tooltip="Añadir Lista"
+          href="#modalLista"
+        >
+          <i class="material-icons left">add</i>
+        </a>
 
-          <a
-            v-if="todolists.length > 0"
-            class="btn-floating waves-effect red tooltipped"
-            data-position="bottom"
-            data-tooltip="Eliminar todas las listas permanentemente"
-            @click="removeLocalStorage"
-          >
-            <i class="material-icons left">delete_forever</i>
-          </a>
-        </div>
+        <a
+          v-if="todolists.length > 0"
+          class="btn-floating waves-effect red tooltipped"
+          data-position="bottom"
+          data-tooltip="Eliminar todas las listas permanentemente"
+          @click="removeLocalStorage"
+        >
+          <i class="material-icons left">delete_forever</i>
+        </a>
       </div>
     </div>
 
@@ -51,8 +49,15 @@
       </div>
     </div>
 
-    <div class="lista-flex-container">
-      <div v-for="list in todolists" :key="list.id" class="lista-flex-item">
+    <div class="lista-flex-container" @dragover.prevent @drop="onDrop($event, 2)">
+      <div
+        v-for="list in todolists"
+        :key="list.id"
+        class="lista-flex-item"
+        draggable="true"
+        @dragstart="startDrag($event, list)"
+        :data-id="list.id"
+      >
         <TodoList
           :title="list.title"
           :id="list.id"
@@ -63,13 +68,14 @@
       </div>
     </div>
   </div>
+
   <Analytics />
-  <SpeedInsights/>
+  <SpeedInsights />
 </template>
 
 <script setup>
 import { Analytics } from '@vercel/analytics/vue'
-import { SpeedInsights } from '@vercel/speed-insights/vue';
+import { SpeedInsights } from '@vercel/speed-insights/vue'
 </script>
 
 <script>
@@ -86,6 +92,7 @@ export default {
       newTodoList: '',
       todolists: [],
       placeholderSuggestion: 'Nombre de la lista',
+      draggedItemId: null,
     }
   },
   mounted() {
@@ -95,8 +102,7 @@ export default {
 
     const savedLists = localStorage.getItem('todolists')
     if (savedLists) {
-      this.todolists = JSON.parse(savedLists).map(list => {
-
+      this.todolists = JSON.parse(savedLists).map((list) => {
         if (!list.id) {
           list.id = crypto.randomUUID()
         }
@@ -105,6 +111,30 @@ export default {
     }
   },
   methods: {
+    startDrag(evt, list) {
+      this.draggedItemId = list.id;
+      evt.dataTransfer.effectAllowed = "move";
+    },
+    onDrop(evt) {
+  const itemID = this.draggedItemId;
+  const draggedList = this.todolists.find(i => i.id === itemID);
+  if (!draggedList) return;
+
+  const targetElement = evt.target.closest(".lista-flex-item");
+  if (!targetElement) return;
+
+  const targetId = targetElement.dataset.id;
+  if (targetId === itemID) return;
+
+  const draggedIndex = this.todolists.findIndex(i => i.id === itemID);
+  const targetIndex = this.todolists.findIndex(i => i.id === targetId);
+
+  if (draggedIndex !== targetIndex) {
+    this.todolists.splice(draggedIndex, 1);
+    this.todolists.splice(targetIndex, 0, draggedList);
+    this.saveTodoLists();
+  }
+},
     addList() {
       const newList = {
         id: crypto.randomUUID(),
@@ -132,7 +162,7 @@ export default {
         if (instance) instance.destroy()
       })
     },
-  },
+  }
 }
 </script>
 
