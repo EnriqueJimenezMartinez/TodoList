@@ -27,6 +27,15 @@
           >
             <i class="material-icons left">delete_forever</i>
           </a>
+          <a
+            v-if="todolists.length > 0"
+            class="btn-floating waves-effect blue tooltipped"
+            data-position="bottom"
+            data-tooltip="Exportar Listas a PDF"
+            @click="exportToPDF"
+          >
+            <i class="material-icons left">picture_as_pdf</i>
+          </a>
         </div>
       </div>
 
@@ -84,6 +93,7 @@ import { SpeedInsights } from '@vercel/speed-insights/vue'
 </script>
 
 <script>
+import { jsPDF } from 'jspdf'
 import TodoList from './components/TodoList.vue'
 import FooterComponent from './components/Footer.vue'
 import M from 'materialize-css'
@@ -117,6 +127,34 @@ export default {
     }
   },
   methods: {
+    exportToPDF() {
+      const doc = new jsPDF()
+      doc.setFontSize(18)
+      doc.text('Tus Listas', 10, 10)
+
+      let y = 20
+      this.todolists.forEach((list, index) => {
+        doc.setFontSize(14)
+        doc.text(`${index + 1}. ${list.title}`, 10, y)
+        y += 10
+
+        list.tasks.forEach((task) => {
+          const taskStatus = task.completed ? 'Completada' : 'No completada'
+
+          doc.setFontSize(12)
+          doc.text(`   - ${task.task} (${taskStatus})`, 12, y)
+          y += 8
+        })
+        y += 5
+        if (y > 270) {
+          doc.addPage()
+          y = 20
+        }
+      })
+
+      doc.save('listas.pdf')
+    },
+
     startDrag(evt, list) {
       this.draggedItemId = list.id
       evt.dataTransfer.effectAllowed = 'move'
