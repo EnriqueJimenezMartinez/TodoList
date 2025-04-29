@@ -1,76 +1,81 @@
 <template>
-  <div class="had-container">
-    <div class="row">
-      <div class="col s12 black z-depth-2">
-        <h2 class="white-text center-align">Tus Listas</h2>
+  <div class="page-wrapper">
+    <div class="had-container">
+      <div class="row">
+        <div class="col s12 black z-depth-2">
+          <h2 class="white-text center-align">Tus Listas</h2>
+        </div>
       </div>
-    </div>
 
-    <div class="row center-align parentWrapper">
-      <div id="btnWrapper" class="z-depth-2">
-        <a
-          class="btn-floating waves-effect waves-light btn modal-trigger tooltipped"
-          data-position="bottom"
-          data-tooltip="Añadir Lista"
-          href="#modalLista"
+      <div class="row center-align parentWrapper">
+        <div id="btnWrapper" class="z-depth-2">
+          <a
+            class="btn-floating waves-effect waves-light btn modal-trigger tooltipped"
+            data-position="bottom"
+            data-tooltip="Añadir Lista"
+            href="#modalLista"
+          >
+            <i class="material-icons left">add</i>
+          </a>
+
+          <a
+            v-if="todolists.length > 0"
+            class="btn-floating waves-effect red tooltipped"
+            data-position="bottom"
+            data-tooltip="Eliminar todas las listas permanentemente"
+            @click="removeLocalStorage"
+          >
+            <i class="material-icons left">delete_forever</i>
+          </a>
+        </div>
+      </div>
+
+      <div id="modalLista" class="modal">
+        <div class="modal-content">
+          <h4>Crear nueva lista</h4>
+          <form @submit.prevent="addList">
+            <div class="input-field">
+              <input
+                v-model="newTodoList"
+                type="text"
+                :placeholder="placeholderSuggestion"
+                required
+              />
+            </div>
+            <button type="button" class="modal-close waves-effect waves-red btn-flat">
+              Cancelar
+            </button>
+            <button type="submit" class="waves-effect waves-green btn-flat">Crear lista</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="lista-flex-container" @dragover.prevent @drop="onDrop($event, 2)">
+        <div
+          v-for="list in todolists"
+          :key="list.id"
+          class="lista-flex-item"
+          draggable="true"
+          @dragstart="startDrag($event, list)"
+          :data-id="list.id"
         >
-          <i class="material-icons left">add</i>
-        </a>
-
-        <a
-          v-if="todolists.length > 0"
-          class="btn-floating waves-effect red tooltipped"
-          data-position="bottom"
-          data-tooltip="Eliminar todas las listas permanentemente"
-          @click="removeLocalStorage"
-        >
-          <i class="material-icons left">delete_forever</i>
-        </a>
+          <TodoList
+            :title="list.title"
+            :id="list.id"
+            :list="list"
+            @eraseTodoListEvent="eraseList"
+            @guardar="saveTodoLists"
+          />
+        </div>
       </div>
     </div>
 
-    <div id="modalLista" class="modal">
-      <div class="modal-content">
-        <h4>Crear nueva lista</h4>
-        <form @submit.prevent="addList">
-          <div class="input-field">
-            <input
-              v-model="newTodoList"
-              type="text"
-              :placeholder="placeholderSuggestion"
-              required
-            />
-          </div>
-          <button type="button" class="modal-close waves-effect waves-red btn-flat">
-            Cancelar
-          </button>
-          <button type="submit" class="waves-effect waves-green btn-flat">Crear lista</button>
-        </form>
-      </div>
-    </div>
-
-    <div class="lista-flex-container" @dragover.prevent @drop="onDrop($event, 2)">
-      <div
-        v-for="list in todolists"
-        :key="list.id"
-        class="lista-flex-item"
-        draggable="true"
-        @dragstart="startDrag($event, list)"
-        :data-id="list.id"
-      >
-        <TodoList
-          :title="list.title"
-          :id="list.id"
-          :list="list"
-          @eraseTodoListEvent="eraseList"
-          @guardar="saveTodoLists"
-        />
-      </div>
-    </div>
+    <Analytics />
+    <SpeedInsights />
+    <footer>
+      <FooterComponent />
+    </footer>
   </div>
-
-  <Analytics />
-  <SpeedInsights />
 </template>
 
 <script setup>
@@ -80,6 +85,7 @@ import { SpeedInsights } from '@vercel/speed-insights/vue'
 
 <script>
 import TodoList from './components/TodoList.vue'
+import FooterComponent from './components/Footer.vue'
 import M from 'materialize-css'
 
 export default {
@@ -112,29 +118,29 @@ export default {
   },
   methods: {
     startDrag(evt, list) {
-      this.draggedItemId = list.id;
-      evt.dataTransfer.effectAllowed = "move";
+      this.draggedItemId = list.id
+      evt.dataTransfer.effectAllowed = 'move'
     },
     onDrop(evt) {
-  const itemID = this.draggedItemId;
-  const draggedList = this.todolists.find(i => i.id === itemID);
-  if (!draggedList) return;
+      const itemID = this.draggedItemId
+      const draggedList = this.todolists.find((i) => i.id === itemID)
+      if (!draggedList) return
 
-  const targetElement = evt.target.closest(".lista-flex-item");
-  if (!targetElement) return;
+      const targetElement = evt.target.closest('.lista-flex-item')
+      if (!targetElement) return
 
-  const targetId = targetElement.dataset.id;
-  if (targetId === itemID) return;
+      const targetId = targetElement.dataset.id
+      if (targetId === itemID) return
 
-  const draggedIndex = this.todolists.findIndex(i => i.id === itemID);
-  const targetIndex = this.todolists.findIndex(i => i.id === targetId);
+      const draggedIndex = this.todolists.findIndex((i) => i.id === itemID)
+      const targetIndex = this.todolists.findIndex((i) => i.id === targetId)
 
-  if (draggedIndex !== targetIndex) {
-    this.todolists.splice(draggedIndex, 1);
-    this.todolists.splice(targetIndex, 0, draggedList);
-    this.saveTodoLists();
-  }
-},
+      if (draggedIndex !== targetIndex) {
+        this.todolists.splice(draggedIndex, 1)
+        this.todolists.splice(targetIndex, 0, draggedList)
+        this.saveTodoLists()
+      }
+    },
     addList() {
       const newList = {
         id: crypto.randomUUID(),
@@ -162,7 +168,7 @@ export default {
         if (instance) instance.destroy()
       })
     },
-  }
+  },
 }
 </script>
 
