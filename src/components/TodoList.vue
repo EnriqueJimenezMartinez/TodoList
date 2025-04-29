@@ -123,7 +123,7 @@ export default {
       const tooltipElems = document.querySelectorAll('.tooltipped')
       tooltipElems.forEach((elem) => {
         const instance = M.Tooltip.getInstance(elem)
-        if (instance) instance.destroy()
+        if (instance) instance.close()
       })
 
       this.$emit('eraseTodoListEvent', this.id)
