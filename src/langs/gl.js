@@ -19,5 +19,9 @@ const gl = { message: {
   nombreLista: 'Nome da lista',
   completada: 'Completada',
   noCompletada: 'Non completada',
+  excel: 'Exportar a Excel',
+  csv: 'Exportar a CSV',
+  si: 'Si',
+  no: 'Non',
 }}
 export default gl

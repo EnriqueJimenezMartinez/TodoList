@@ -18,6 +18,10 @@ const fr = { message: {
   github: 'Mon GitHub',
   nombreLista: 'Nom de la liste',
   completada: 'Complété',
-  noCompletada: 'Pas terminé'
+  noCompletada: 'Pas terminé',
+  excel: 'Exporter vers Excel',
+  csv: 'Exporter au format CSV',
+  si: 'Oui',
+  no: 'Non',
 }}
 export default fr

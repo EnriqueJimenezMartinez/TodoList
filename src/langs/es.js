@@ -12,13 +12,17 @@ const es ={ message: {
   verTodas: 'Ver todas las tareas',
   todasTareas: 'Todas las tareas',
   cerrar: 'Cerrar',
-  eliminarListaVacia: '¿ELiminar lista vacía?',
+  eliminarListaVacia: '¿Eliminar lista vacía?',
   eliminarVaciaTexto: 'La lista está vacía. ¿Quieres eliminarla?',
   footText:'Proyecto de gestión de tareas hecho por Enrique Jiménez',
   github: 'Mi github',
   nombreLista: 'Nombre de la lista',
   completada: 'Completada',
   noCompletada: 'No completada',
+  excel: 'Exportar a Excel',
+  csv: 'Exportar a CSV',
+  si: 'Si',
+  no: 'No',
 }}
 export default es
 

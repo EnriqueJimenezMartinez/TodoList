@@ -19,5 +19,9 @@ const de = { message: {
   nombreLista: 'Name der Liste',
   completada: 'Vollendet',
   noCompletada: 'Nicht abgeschlossen',
+  excel: 'Export nach Excel',
+  csv: 'Als CSV exportieren',
+  si: 'Ja',
+  no: 'Nein',
 }}
 export default de

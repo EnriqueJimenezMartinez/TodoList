@@ -73,8 +73,8 @@
       <p>{{ $t('message.eliminarVaciaTexto') }}</p>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-close btn-flat" @click="confirmEraseList">Sí</a>
-      <a href="#!" class="modal-close btn-flat" @click="eraseOnlyTask">No</a>
+      <a href="#!" class="modal-close btn-flat" @click="confirmEraseList">{{ $t('message.si') }}</a>
+      <a href="#!" class="modal-close btn-flat" @click="eraseOnlyTask">{{ $t('message.no') }}</a>
     </div>
   </div>
 </template>

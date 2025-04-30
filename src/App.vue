@@ -13,7 +13,11 @@
       </div>
 
       <div class="row center-align parentWrapper">
-        <div id="btnWrapper" class="z-depth-2">
+        <div
+          id="btnWrapper"
+          class="z-depth-2"
+          :style="{ width: todolists.length === 0 ? '100px' : '255px' }"
+        >
           <a
             class="btn-floating waves-effect waves-light btn modal-trigger tooltipped"
             data-position="bottom"
@@ -40,6 +44,24 @@
             @click="exportToPDF"
           >
             <i class="material-icons left">picture_as_pdf</i>
+          </a>
+          <a
+            v-if="todolists.length > 0"
+            class="btn-floating waves-effect green tooltipped"
+            data-position="bottom"
+            :data-tooltip="$t('message.excel')"
+            @click="exportToExcel"
+          >
+            <i class="material-icons left">grid_on</i>
+          </a>
+          <a
+            v-if="todolists.length > 0"
+            class="btn-floating waves-effect yellow tooltipped"
+            data-position="bottom"
+            :data-tooltip="$t('message.csv')"
+            @click="exportToCSV"
+          >
+            <i class="material-icons left">insert_drive_file</i>
           </a>
         </div>
       </div>
@@ -101,11 +123,11 @@ import { SpeedInsights } from '@vercel/speed-insights/vue'
 
 <script>
 import { jsPDF } from 'jspdf'
+import * as XLSX from 'xlsx'
 import TodoList from './components/TodoList.vue'
 import FooterComponent from './components/Footer.vue'
 import LanguageSelector from './components/LanguageSelector.vue'
 import M from 'materialize-css'
-
 export default {
   name: 'App',
   components: {
@@ -134,6 +156,43 @@ export default {
     }
   },
   methods: {
+    exportToCSV() {
+      let csv = 'Lista,Tarea,Estado\n'
+
+      this.todolists.forEach((list) => {
+        list.tasks.forEach((task) => {
+          const estado = task.completed
+            ? this.$t('message.completada')
+            : this.$t('message.noCompletada')
+          csv += `"${list.title}","${task.task}","${estado}"\n`
+        })
+      })
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      const url = URL.createObjectURL(blob)
+      link.setAttribute('href', url)
+      link.setAttribute('download', 'listas.csv')
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    },
+    exportToExcel() {
+      const wb = XLSX.utils.book_new()
+
+      this.todolists.forEach((list) => {
+        const rows = list.tasks.map((task) => ({
+          Tarea: task.task,
+          Estado: task.completed ? this.$t('message.completada') : this.$t('message.noCompletada'),
+        }))
+
+        const ws = XLSX.utils.json_to_sheet(rows.length > 0 ? rows : [{ Tarea: '', Estado: '' }])
+        XLSX.utils.book_append_sheet(wb, ws, list.title.substring(0, 31))
+      })
+
+      XLSX.writeFile(wb, 'listas.xlsx')
+    },
     exportToPDF() {
       const doc = new jsPDF()
       doc.setFontSize(18)
@@ -146,7 +205,9 @@ export default {
         y += 10
 
         list.tasks.forEach((task) => {
-          const taskStatus = task.completed ? this.$t('message.completada') : this.$t('message.noCompletada')
+          const taskStatus = task.completed
+            ? this.$t('message.completada')
+            : this.$t('message.noCompletada')
 
           doc.setFontSize(12)
           doc.text(`   - ${task.task} (${taskStatus})`, 12, y)
@@ -234,7 +295,7 @@ export default {
   display: flex;
   gap: 10px;
   justify-content: center;
-  width: 150px;
+  width: 200px;
   background: black;
   padding: 0 0 20px 0;
   border-radius: 50px;

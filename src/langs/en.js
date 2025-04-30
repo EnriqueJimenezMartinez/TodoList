@@ -19,5 +19,9 @@ const en = { message: {
   nombreLista: 'List name',
   completada: 'Completed',
   noCompletada: 'Not completada',
+  excel: 'Export to Excel',
+  csv: 'Export to CSV',
+  si: 'Si',
+  no: 'No',
 }}
 export default en
