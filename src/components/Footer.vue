@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col l6 s12">
           <p class="grey-text text-lighten-4">
-            Proyecto de gestión de listas de tareas hecho por Enrique Jiménez.
+            {{ $t('message.footText') }}
           </p>
         </div>
         <div class="col l4 offset-l2 s12">
@@ -15,8 +15,8 @@
                 href="https://github.com/EnriqueJimenezMartinez"
                 target="_blank"
               >
-                <i class="material-icons left">code</i>
-                Mi GitHub
+                <i class="bi bi-github"></i>
+                {{ $t('message.github') }}
               </a>
             </li>
           </ul>

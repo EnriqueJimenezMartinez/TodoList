@@ -1,0 +1,23 @@
+const gl = { message: {
+  tusListas: 'As túas listas',
+  nuevaLista: 'Engadir lista',
+  eliminarLocalStorage: 'Eliminar todas as listas permanentemente',
+  pdf: 'Exportar a PDF',
+  crearLista: 'Crear unha nova lista',
+  crear: 'Crear',
+  cancelar: 'Cancelar',
+  nuevaTarea: 'Nova tarefa',
+  borrarLista: 'Eliminar lista',
+  borrarTarea: 'Eliminar tarefa',
+  verTodas: 'Ver todas as tarefas',
+  todasTareas: 'Todas as tarefas',
+  cerrar: 'Pechar',
+  eliminarListaVacia: 'Eliminar lista baleira?',
+  eliminarVaciaTexto: 'A lista está baleira. Queres eliminala?',
+  footText: 'Proxecto de xestión de tarefas feito por Enrique Jiménez',
+  github: 'O meu GitHub',
+  nombreLista: 'Nome da lista',
+  completada: 'Completada',
+  noCompletada: 'Non completada',
+}}
+export default gl

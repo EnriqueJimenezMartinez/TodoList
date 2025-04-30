@@ -14,7 +14,7 @@
     <div class="center-align">
       <a
         class="btn-floating btn-small red tooltipped"
-        :data-tooltip="'Borrar Tarea: ' + task.task"
+        :data-tooltip="$t('message.borrarTarea') +': ' + task.task"
         data-position="bottom"
         @click="eraseItemEvent"
       >

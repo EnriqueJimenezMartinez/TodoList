@@ -3,7 +3,12 @@
     <div class="had-container">
       <div class="row">
         <div class="col s12 black z-depth-2">
-          <h2 class="white-text center-align">Tus Listas</h2>
+          <div class="col s1">
+            <LanguageSelector />
+          </div>
+          <div class="col s10 center-align">
+            <h2 class="white-text" style="margin-top: 0">{{ $t('message.tusListas') }}</h2>
+          </div>
         </div>
       </div>
 
@@ -12,7 +17,7 @@
           <a
             class="btn-floating waves-effect waves-light btn modal-trigger tooltipped"
             data-position="bottom"
-            data-tooltip="Añadir Lista"
+            :data-tooltip="$t('message.nuevaLista')"
             href="#modalLista"
           >
             <i class="material-icons left">add</i>
@@ -22,7 +27,7 @@
             v-if="todolists.length > 0"
             class="btn-floating waves-effect red tooltipped"
             data-position="bottom"
-            data-tooltip="Eliminar todas las listas permanentemente"
+            :data-tooltip="$t('message.eliminarLocalStorage')"
             @click="removeLocalStorage"
           >
             <i class="material-icons left">delete_forever</i>
@@ -31,7 +36,7 @@
             v-if="todolists.length > 0"
             class="btn-floating waves-effect blue tooltipped"
             data-position="bottom"
-            data-tooltip="Exportar Listas a PDF"
+            :data-tooltip="$t('message.pdf')"
             @click="exportToPDF"
           >
             <i class="material-icons left">picture_as_pdf</i>
@@ -41,20 +46,22 @@
 
       <div id="modalLista" class="modal">
         <div class="modal-content">
-          <h4>Crear nueva lista</h4>
+          <h4>{{ $t('message.crearLista') }}</h4>
           <form @submit.prevent="addList">
             <div class="input-field">
               <input
                 v-model="newTodoList"
                 type="text"
-                :placeholder="placeholderSuggestion"
+                :placeholder="$t('message.nuevaLista')"
                 required
               />
             </div>
             <button type="button" class="modal-close waves-effect waves-red btn-flat">
-              Cancelar
+              {{ $t('message.cancelar') }}
             </button>
-            <button type="submit" class="waves-effect waves-green btn-flat">Crear lista</button>
+            <button type="submit" class="waves-effect waves-green btn-flat">
+              {{ $t('message.crear') }}
+            </button>
           </form>
         </div>
       </div>
@@ -96,6 +103,7 @@ import { SpeedInsights } from '@vercel/speed-insights/vue'
 import { jsPDF } from 'jspdf'
 import TodoList from './components/TodoList.vue'
 import FooterComponent from './components/Footer.vue'
+import LanguageSelector from './components/LanguageSelector.vue'
 import M from 'materialize-css'
 
 export default {
@@ -107,7 +115,6 @@ export default {
     return {
       newTodoList: '',
       todolists: [],
-      placeholderSuggestion: 'Nombre de la lista',
       draggedItemId: null,
     }
   },
@@ -130,7 +137,7 @@ export default {
     exportToPDF() {
       const doc = new jsPDF()
       doc.setFontSize(18)
-      doc.text('Tus Listas', 10, 10)
+      doc.text(this.$t('message.tusListas'), 10, 10)
 
       let y = 20
       this.todolists.forEach((list, index) => {
@@ -139,7 +146,7 @@ export default {
         y += 10
 
         list.tasks.forEach((task) => {
-          const taskStatus = task.completed ? 'Completada' : 'No completada'
+          const taskStatus = task.completed ? this.$t('message.completada') : this.$t('message.noCompletada')
 
           doc.setFontSize(12)
           doc.text(`   - ${task.task} (${taskStatus})`, 12, y)

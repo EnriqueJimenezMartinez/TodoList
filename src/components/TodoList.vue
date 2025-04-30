@@ -20,7 +20,7 @@
           <a
             class="btn-floating btn-small waves-effect waves-light red tooltipped"
             data-position="bottom"
-            data-tooltip="Borrar Lista"
+            :data-tooltip="$t('message.borrarLista')"
             @click="eraseListEvent"
           >
             <i class="material-icons">delete</i>
@@ -29,7 +29,7 @@
       </div>
 
       <div class="input-field">
-        <input v-model="newTask" type="text" placeholder="Nueva tarea" @keyup.enter="addItem" />
+        <input v-model="newTask" type="text" :placeholder="$t('message.nuevaTarea')" @keyup.enter="addItem" />
       </div>
 
       <ul class="special collection" style="display: flex; flex-direction: column; gap: 10px">
@@ -42,7 +42,7 @@
           @toggleCompleted="toggleCompleted"
         />
         <li v-if="tasks.length > 3" class="collection-item center-align">
-          <a :href="`#modal-tasks-${id}`" class="modal-trigger"> Ver todas las tareas... </a>
+          <a :href="`#modal-tasks-${id}`" class="modal-trigger">{{ $t('message.verTodas') }} </a>
         </li>
       </ul>
     </div>
@@ -50,7 +50,7 @@
 
   <div :id="`modal-tasks-${id}`" class="modal">
     <div class="modal-content">
-      <h5>Todas las tareas</h5>
+      <h5>{{ $t('message.todasTareas') }}</h5>
       <ul class="collection">
         <Task
           v-for="(task, index) in tasks"
@@ -63,14 +63,14 @@
       </ul>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-close btn-flat">Cerrar</a>
+      <a href="#!" class="modal-close btn-flat">{{ $t('message.cerrar') }}</a>
     </div>
   </div>
 
   <div :id="`modal-confirm-${id}`" class="modal">
     <div class="modal-content">
-      <h5>¿Eliminar lista vacía?</h5>
-      <p>La lista está vacía. ¿Quieres eliminarla?</p>
+      <h5>{{ $t('message.eliminarListaVacia') }}</h5>
+      <p>{{ $t('message.eliminarVaciaTexto') }}</p>
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-close btn-flat" @click="confirmEraseList">Sí</a>
