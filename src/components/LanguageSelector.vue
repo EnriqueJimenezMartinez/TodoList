@@ -4,8 +4,8 @@
       <option value="es">Español</option>
       <option value="en">English</option>
       <option value="fr">Français</option>
-      <option value="de">Deutsch</option>
-      <option value="gl">Galego</option>
+      <option value="de"> Deutsch</option>
+      <option value="gl"> Galego</option>
     </select>
   </div>
 </template>
@@ -21,14 +21,13 @@ export default {
 }
 </script>
 <style scoped>
-select {
-  display: block;
-}
 .locale-changer {
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-
   display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+select {
+  max-width: 150px;
+  display: block;
 }
 </style>

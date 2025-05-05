@@ -14,7 +14,7 @@ const gl = { message: {
   cerrar: 'Pechar',
   eliminarListaVacia: 'Eliminar lista baleira?',
   eliminarVaciaTexto: 'A lista está baleira. Queres eliminala?',
-  footText: 'Proxecto de xestión de tarefas feito por Enrique Jiménez',
+  footText: 'Proxecto de xestión de tarefas desenvolvido por Enrique Jiménez',
   github: 'O meu GitHub',
   nombreLista: 'Nome da lista',
   completada: 'Completada',
@@ -23,5 +23,6 @@ const gl = { message: {
   csv: 'Exportar a CSV',
   si: 'Si',
   no: 'Non',
+  exportar: 'Exportar',
 }}
 export default gl

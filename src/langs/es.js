@@ -14,7 +14,7 @@ const es ={ message: {
   cerrar: 'Cerrar',
   eliminarListaVacia: '¿Eliminar lista vacía?',
   eliminarVaciaTexto: 'La lista está vacía. ¿Quieres eliminarla?',
-  footText:'Proyecto de gestión de tareas hecho por Enrique Jiménez',
+  footText:'Proyecto de gestión de tareas desarrolado por Enrique Jiménez',
   github: 'Mi github',
   nombreLista: 'Nombre de la lista',
   completada: 'Completada',
@@ -23,6 +23,7 @@ const es ={ message: {
   csv: 'Exportar a CSV',
   si: 'Si',
   no: 'No',
+  exportar: 'Exportar',
 }}
 export default es
 

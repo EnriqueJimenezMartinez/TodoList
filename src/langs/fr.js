@@ -14,7 +14,7 @@ const fr = { message: {
   cerrar: 'Fermer',
   eliminarListaVacia: 'Supprimer la liste vide ?',
   eliminarVaciaTexto: 'La liste est vide. Voulez-vous la supprimer ?',
-  footText: 'Projet de gestion de tâches réalisé par Enrique Jiménez',
+  footText: 'Projet de gestion des tâches développé par Enrique Jiménez',
   github: 'Mon GitHub',
   nombreLista: 'Nom de la liste',
   completada: 'Complété',
@@ -23,5 +23,6 @@ const fr = { message: {
   csv: 'Exporter au format CSV',
   si: 'Oui',
   no: 'Non',
+  exportar: 'Exporter',
 }}
 export default fr

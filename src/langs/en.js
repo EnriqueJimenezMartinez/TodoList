@@ -14,7 +14,7 @@ const en = { message: {
   cerrar: 'Close',
   eliminarListaVacia: 'Delete empty list?',
   eliminarVaciaTexto: 'The list is empty. Do you want to delete it?',
-  footText: 'Task management project by Enrique Jiménez',
+  footText: 'Task management project developed by Enrique Jiménez',
   github: 'My GitHub',
   nombreLista: 'List name',
   completada: 'Completed',
@@ -23,5 +23,6 @@ const en = { message: {
   csv: 'Export to CSV',
   si: 'Si',
   no: 'No',
+  exportar: 'Export',
 }}
 export default en

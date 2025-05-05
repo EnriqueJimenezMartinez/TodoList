@@ -14,7 +14,7 @@ const de = { message: {
   cerrar: 'Schließen',
   eliminarListaVacia: 'Leere Liste löschen?',
   eliminarVaciaTexto: 'Die Liste ist leer. Möchtest du sie löschen?',
-  footText: 'Aufgabenverwaltungsprojekt von Enrique Jiménez',
+  footText: 'Aufgabenverwaltungsprojekt, entwickelt von Enrique Jiménez',
   github: 'Mein GitHub',
   nombreLista: 'Name der Liste',
   completada: 'Vollendet',
@@ -23,5 +23,6 @@ const de = { message: {
   csv: 'Als CSV exportieren',
   si: 'Ja',
   no: 'Nein',
+  exportar: 'Export',
 }}
 export default de
