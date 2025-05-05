@@ -27,7 +27,7 @@ export default {
   align-items: center;
 }
 select {
-  max-width: 150px;
+  max-width: 79px;
   display: block;
 }
 </style>
